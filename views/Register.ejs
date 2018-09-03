@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include parts/head %>
+    </head>
+    <body>
+        <form action="/user/register" method="POST" >
+          Username:<br>
+          <input type="text" name="username" id="username" value="">
+          <br>
+          Password:<br>
+          <input type="password" name="password" id="password" value="">
+          <br>
+          Email:<br>
+          <input type="text" name="email" id="email" value="">
+          <br><br>
+          <input type="submit" value="Register">
+        </form>
+
+        <% include parts/footer %>
+    </body>
+</html>

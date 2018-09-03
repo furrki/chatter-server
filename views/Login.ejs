@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include parts/head %>
+        <script>
+
+        $(document).ready(function(){
+            $("button").click(function(){
+                Parse.User.logIn($("#username").val(), $("#password").val() ).then(function(result) {
+                console.log("c")
+
+            }, function(error) {
+                console.log("d")
+
+            });
+            })
+        })
+        var currentUser = Parse.User.current();
+        if (currentUser) {
+            // do stuff with the user
+            console.log('User is logged in');
+        } else {
+            // show the signup or login page
+
+        }
+        </script>
+    </head>
+    <body>
+          Username:<br>
+          <input type="text" name="username" id="username" value="">
+          <br>
+          Password:<br>
+          <input type="password" name="password"  id="password" value="">
+          <br><br>
+          <button>Login </button>
+
+
+        <% include parts/footer %>
+    </body>
+</html>

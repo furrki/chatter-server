@@ -1,18 +1,16 @@
 {
-  "name": "parse-server-example",
-  "version": "1.4.0",
-  "description": "An example Parse API server using the parse-server module",
+  "name": "Project-Mars",
+  "version": "1.0.0",
+  "description": "A Space Project",
   "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ParsePlatform/parse-server-example"
-  },
   "license": "MIT",
   "dependencies": {
     "express": "~4.11.x",
     "kerberos": "~0.0.x",
     "parse": "~1.8.0",
-    "parse-server": "*"
+    "parse-server": "*",
+    "ejs": "^2.5.2",
+    "body-parser": "~1.0.0"
   },
   "scripts": {
     "start": "node index.js"
