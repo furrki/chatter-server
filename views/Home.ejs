@@ -19,17 +19,46 @@
             </div>
         </div>-->
         <div class="row">
-            <div class="featured-news col-md-3 col-xs-6 col-lg-3 col-sm-4 view view-first">
-                Что такое Lorem Ipsum?
-                Lorem Ipsum - это текст-"рыба", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной "рыбой" для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов. Lorem Ipsum не только успешно пережил без заметных изменений пять веков, но и перешагнул в электронный дизайн. Его популяризации в новое время послужили публикация листов Letraset с образцами Lorem Ipsum в 60-х годах и, в более недавнее время, программы электронной вёрстки типа Aldus PageMaker, в шаблонах которых используется Lorem Ipsum.
+            <div class="featured-news col-md-3 col-xs-6 col-lg-3 col-sm-4 view view-first text-center sidebar">
+                <form>
+                    <div class="form-group">
+                      <label for="logusername">Username</label>
+                      <input type="text" class="form-control" id="logusername" placeholder="Enter username">
+                    </div>
+                    <div class="form-group">
+                      <label for="logpass">Password</label>
+                      <input type="password" class="form-control" id="logpass" placeholder="Password">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
             </div>
-            <div class="featured-news col-md-9 col-xs-6 col-lg-9 col-sm-8 view view-first">
-                Что такое Lorem Ipsum?
-                Lorem Ipsum - это текст-"рыба", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной "рыбой" для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов. Lorem Ipsum не только успешно пережил без заметных изменений пять веков, но и перешагнул в электронный дизайн. Его популяризации в новое время послужили публикация листов Letraset с образцами Lorem Ipsum в 60-х годах и, в более недавнее время, программы электронной вёрстки типа Aldus PageMaker, в шаблонах которых используется Lorem Ipsum.
+            <div class="featured-news col-md-7 col-xs-5 col-lg-7 col-sm-5 view view-first text-center">
+                <div class="super-form to-center">
+                    <form>
+                        <div class="form-group">
+                          <label for="regemail">Email address</label>
+                          <input type="email" class="form-control" id="regemail" aria-describedby="emailHelp" placeholder="Enter email">
+                        </div>
+                        <div class="form-group">
+                          <label for="regusername">Username</label>
+                          <input type="text" class="form-control" id="regusername" placeholder="Enter username">
+                        </div>
+                        <div class="form-group">
+                          <label for="regpass">Password</label>
+                          <input type="password" class="form-control" id="regpass" placeholder="Password">
+                        </div>
+                        <div class="form-check">
+                          <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                          <label class="form-check-label" for="exampleCheck1">I've read and accepted.</label>
+                        </div>
+                        <button type="submit" id="regButton" class="btn btn-primary">Register</button>
+                    </form>
+                </div>
             </div>
         </div>
     </section>
 
+<!--
     <section class="container featured-news ">
 
         <div class="row">
@@ -51,12 +80,38 @@
             </div>
         </div>
     </section>
+-->
+<script>
 
+$(document).ready(function(){
+        $(document).on("click", "#regButton", function(e) {
+          e.preventDefault();
+          var email = document.getElementById('regemail').value;
+          var password = document.getElementById('regpass').value;
+          var uname = document.getElementById('regusername').value;
+
+
+          var user = new Parse.User();
+            user.set("username", uname);
+            user.set("password", password);
+            user.set("email", email);
+
+            user.signUp(null).then(function(result) {
+                alert("Registered!")
+
+                Parse.User.logIn(uname, password).then(function(result) {
+                    alert("Logged In!")
+                }, function(error) {
+                    alert(error)
+
+                });
+            }, function(error) {
+                alert(error)
+
+            });
+        })
+   })
+</script>
     <%- include('parts/footer.ejs') %>
-
-
-
-
-
 </body>
 </html>

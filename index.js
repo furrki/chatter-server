@@ -5,6 +5,7 @@ var express = require('express');
 var ParseServer = require('parse-server').ParseServer;
 var path = require('path');
 
+var ParseDashboard = require('parse-dashboard');
 var bodyParser = require('body-parser');
 
 var databaseUri = process.env.DATABASE_URI || process.env.MONGODB_URI;
@@ -21,12 +22,32 @@ var api = new ParseServer({
   serverURL: process.env.SERVER_URL || 'http://localhost:1337/parse',  // Don't forget to change to https if needed
 
 });
+
+var dashboard = new ParseDashboard({
+  "apps": [
+    {
+      "serverURL":  process.env.SERVER_URL || 'http://localhost:1337/parse',
+      "appId": process.env.APP_ID || 'myAppId',
+      "masterKey": process.env.MASTER_KEY || 'MASTER_KEY',
+      "appName": "Project Mars"
+    }
+  ],
+  "users": [
+    {
+      "user":"admin",
+      "pass": "a"
+    }
+  ],
+  "useEncryptedPasswords": false,
+  "trustProxy": 1
+}, false);
 // Client-keys like the javascript key or the .NET key are not necessary with parse-server
 // If you wish you require them, you can set them as options in the initialization above:
 // javascriptKey, restAPIKey, dotNetKey, clientKey
 
 var app = express();
 
+app.disable('view cache');
 // Serve static assets from the /public folder
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -51,6 +72,7 @@ var userRoutes = require('./routes/user');
 app.use('/user', userRoutes);
 
 
+app.use('/dashboard', dashboard);
 
 var port = process.env.PORT || 1337;
 var httpServer = require('http').createServer(app);
