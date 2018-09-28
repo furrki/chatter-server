@@ -4,7 +4,10 @@
 var express = require('express');
 var ParseServer = require('parse-server').ParseServer;
 var path = require('path');
+var session = require('express-session')
 
+
+var cookieParser = require('cookie-parser');
 var ParseDashboard = require('parse-dashboard');
 var bodyParser = require('body-parser');
 
@@ -63,7 +66,29 @@ var mountPath = process.env.PARSE_MOUNT || '/parse';
 app.use(mountPath, api);
 
 // Parse Server plays nicely with the rest of your web routes
+Parse.initialize("myAppId"); //PASTE YOUR Back4App APPLICATION ID
+Parse.serverURL = 'http://localhost:1337/parse'
 
+
+app.use(cookieParser());
+app.use(session({
+    secret: "fd34s@!@dfa453f3DF#$D&W",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: !true }
+}));
+app.get('*', function(req, res, next) {
+
+    next();
+
+});
+
+function ensureAuthenticated(req, res, next){
+    if(!req.session.user){
+        res.redirect('/');
+    }
+    return next();
+}
 
 var indexRoutes = require('./routes/index');
 app.use('/', indexRoutes);
@@ -74,6 +99,7 @@ app.use('/user', userRoutes);
 
 app.use('/dashboard', dashboard);
 
+
 var port = process.env.PORT || 1337;
 var httpServer = require('http').createServer(app);
 httpServer.listen(port, function() {
@@ -82,3 +108,12 @@ httpServer.listen(port, function() {
 
 // This will enable the Live Query real-time server
 ParseServer.createLiveQueryServer(httpServer);
+
+/*
+var cron = require('cron');
+var cronJob = cron.job("5 * * * * * *", function(){
+    // perform operation e.g. GET request http.get() etc.
+    console.info('cron job completed');
+});
+cronJob.start();
+*/

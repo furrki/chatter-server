@@ -30,22 +30,27 @@ router.get('/login', function(req, res) {
     res.render("Login")
 });
 
+router.get('/logout', function(req, res) {
+    console.log(req.session.user)
+    req.session.user = null
 
-router.post('/login', async function(req, res) {
+    res.redirect("/")
+});
 
-    username = req.body.username
-    password = req.body.password
 
-    Parse.User.logIn(username, password, {
-          // If the username and password matches
-          success: function(user) {
-              res.render("Register")
-          },
-          // If there is an error
-          error: function(user, error) {
-              res.render("Login")
-          }
-      });
+router.post('/login', function(req, res, next) {
+
+    username = req.body.logusername
+    password = req.body.logpass
+    console.log(username,password)
+    Parse.User.logIn(username, password).then(function(result) {
+        req.session.user = result
+        req.session.save()
+        console.log(req.session.user)
+        res.redirect("/")
+    }, function(error) {
+        console.log(error)
+    });
 })
 
 module.exports = router;
