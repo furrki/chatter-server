@@ -24,7 +24,7 @@
         const results = await query.find();
         for (let i = 0; i < results.length; i++) {
             object = results[i];
-            $("#currencies").append("<tr onclick='selectCurrency(\""+object.get("Name")+"\")' > <td>1 "+object.get("Name")+" = </td><td>₺"+object.get("Sell")+"</td><td>₺"+object.get("Buy")+"</td><td>"+object.get("Change")+"%</td> </tr>")
+            $("#currencies").append("<tr onclick='selectCurrency(\""+object.get("Name")+"\")' > <td>1 "+object.get("Name")+"  </td><td>₺"+object.get("Sell")+"</td><td>₺"+object.get("Buy")+"</td><td>"+object.get("Change")+"%</td> </tr>")
         }
     }
     retrieveValues()
