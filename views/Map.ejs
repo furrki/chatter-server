@@ -1,14 +1,4 @@
-<html lang="en">
-<%- include('parts/head.ejs') %>
-<body class="index" id="page-top" cz-shortcut-listen="true">
-
-    <% if(isLogged){ %>
-        <%- include('parts/header.ejs') %>
-    <% } else { %>
-        <%- include('parts/public_header.ejs') %>
-    <% }  %>
-
-
+<div class="my-3 p-3 bg-white rounded shadow-sm">
     <section class="container featured-news ">
         <div class="row">
             <div class="trending-product col-md-12 col-xs-12 col-lg-12 col-sm-12 ">
@@ -41,6 +31,5 @@
         }
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOmKk11CsvJ1_RA6yi4H3_0znRd4zzwW8&callback=myMap"></script>
-    <%- include('parts/footer.ejs') %>
-</body>
-</html>
+
+</div>

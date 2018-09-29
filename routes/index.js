@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 router.get('/', function(req, res) {
-    
+
     if(req.session.user){
         res.render("Template",{
             page:"Home",
@@ -20,10 +20,10 @@ router.get('/', function(req, res) {
 });
 
 router.get('/map', function(req, res) {
-    console.log(req.session.user)
-    isLogged = req.session.user !== undefined
-    res.render("Map", {
-        isLogged: isLogged
+    res.render("Template",{
+        page:"Map",
+        args: { 
+        }
     })
 
 });

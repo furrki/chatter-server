@@ -6,7 +6,6 @@ var ParseServer = require('parse-server').ParseServer;
 var path = require('path');
 var session = require('express-session')
 
-
 var cookieParser = require('cookie-parser');
 var ParseDashboard = require('parse-dashboard');
 var bodyParser = require('body-parser');
@@ -29,6 +28,7 @@ var api = new ParseServer({
 
 var app = express();
 
+ require('express-dynamic-helpers-patch')(app);
 app.disable('view cache');
 // Serve static assets from the /public folder
 
@@ -68,6 +68,11 @@ function ensureAuthenticated(req, res, next){
     }
     return next();
 }
+app.dynamicHelpers({
+    islogged: function(req, res){
+        return req.session.user !== undefined;
+    }
+});
 
 var indexRoutes = require('./routes/index');
 app.use('/', indexRoutes);
