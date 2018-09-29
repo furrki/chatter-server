@@ -56,10 +56,13 @@ app.use(session({
     saveUninitialized: true,
     cookie: { secure: !true }
 }));
+
+
+User = require("./models/User.js")
+
+
 app.get('*', function(req, res, next) {
-
     next();
-
 });
 
 function ensureAuthenticated(req, res, next){

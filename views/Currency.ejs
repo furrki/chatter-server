@@ -34,14 +34,14 @@
         }
         console.log(cc.get("Name"))
 
-        $("#currencies").append("<tr onclick='selectCurrency(\"\")' > <td>1 Mars Lira =</td><td>₺"+float(cc.get("Sell"))+"</td><td>₺"+float(cc.get("Buy"))+"</td><td>"+cc.get("Change")+"%</td> </tr>")
+        $("#currencies").append("<tr onclick='selectCurrency(\"\")' > <td>1 Mars Lira </td><td>₺"+float(cc.get("Sell"))+"</td><td>₺"+float(cc.get("Buy"))+"</td><td>"+cc.get("Change")+"%</td> </tr>")
 
         for (let i = 0; i < results.length; i++) {
             object = results[i];
             if(object.get("Name") != name){
                 sellRatio = parseFloat(cc.get("Sell")) /  parseFloat(object.get("Sell"))
                 buyRatio = parseFloat(cc.get("Buy")) / parseFloat(object.get("Buy"))
-                $("#currencies").append("<tr onclick='selectCurrency(\""+object.get("Name")+"\")' > <td>1 "+object.get("Name")+" = </td><td>"+float(sellRatio)+"</td><td>"+float(buyRatio)+"</td><td>"+object.get("Change")+"%</td> </tr>")
+                $("#currencies").append("<tr onclick='selectCurrency(\""+object.get("Name")+"\")' > <td>1 "+object.get("Name")+"  </td><td>"+float(sellRatio)+"</td><td>"+float(buyRatio)+"</td><td>"+object.get("Change")+"%</td> </tr>")
             }
         }
     }
