@@ -1,11 +1,21 @@
 var express = require('express');
 var router = express.Router();
 router.get('/', function(req, res) {
-    console.log(req.session.user)
+    
     if(req.session.user){
-        res.render("Home")
+        res.render("Template",{
+            page:"Home",
+            args: {
+                name:"furrki"
+            }
+        })
     } else {
-        res.render("Public_Home")
+        res.render("Template",{
+            page:"Public_Home",
+            args: {
+                name:"furrki"
+            }
+        })
     }
 });
 

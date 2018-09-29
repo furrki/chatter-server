@@ -26,27 +26,6 @@ var api = new ParseServer({
 
 });
 
-var dashboard = new ParseDashboard({
-  "apps": [
-    {
-      "serverURL":  process.env.SERVER_URL || 'http://localhost:1337/parse',
-      "appId": process.env.APP_ID || 'myAppId',
-      "masterKey": process.env.MASTER_KEY || 'MASTER_KEY',
-      "appName": "Project Mars"
-    }
-  ],
-  "users": [
-    {
-      "user":"admin",
-      "pass": "a"
-    }
-  ],
-  "useEncryptedPasswords": false,
-  "trustProxy": 1
-}, false);
-// Client-keys like the javascript key or the .NET key are not necessary with parse-server
-// If you wish you require them, you can set them as options in the initialization above:
-// javascriptKey, restAPIKey, dotNetKey, clientKey
 
 var app = express();
 
@@ -96,8 +75,9 @@ app.use('/', indexRoutes);
 var userRoutes = require('./routes/user');
 app.use('/user', userRoutes);
 
+var economyRoutes = require('./routes/economy');
+app.use('/economy', economyRoutes);
 
-app.use('/dashboard', dashboard);
 
 
 var port = process.env.PORT || 1337;
