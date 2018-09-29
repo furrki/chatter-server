@@ -6,6 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "express": "~4.11.x",
+    "express-dynamic-helpers-patch": "*",
     "kerberos": "~0.0.x",
     "parse": "*",
     "parse-server": "*",
