@@ -1,0 +1,52 @@
+<div class="my-3 p-3 bg-white rounded shadow-sm">
+        <div class="row">
+            <div class="container text-center">
+              <table class="table table-stripped table-hover" id="economyTable">
+                <thead>
+                  <tr>
+                    <th>Currency</th>
+                    <th>Sell</th>
+                    <th>Buy</th>
+                    <th>Change</th>
+                  </tr>
+                </thead>
+                <tbody id="currencies">
+
+                </tbody>
+              </table>
+            </div>
+        </div>
+</div>
+<script>
+
+    async function retrieveValues() {
+        const Currency = Parse.Object.extend("Currency");
+        const query = new Parse.Query(Currency);
+        //query.equalTo("Name", "<%-name%>");
+        const results = await query.find();
+        currency = results[0]
+        name = "<%-name%>"
+        cc = results[0]
+        for(i in results){
+            if(results[i].get("Name") == name){
+                cc = results[i]
+            }
+        }
+        console.log(cc.get("Name"))
+
+        $("#currencies").append("<tr onclick='selectCurrency(\"\")' > <td>1 Mars Lira =</td><td>₺"+float(cc.get("Sell"))+"</td><td>₺"+float(cc.get("Buy"))+"</td><td>"+cc.get("Change")+"%</td> </tr>")
+
+        for (let i = 0; i < results.length; i++) {
+            object = results[i];
+            if(object.get("Name") != name){
+                sellRatio = parseFloat(cc.get("Sell")) /  parseFloat(object.get("Sell"))
+                buyRatio = parseFloat(cc.get("Buy")) / parseFloat(object.get("Buy"))
+                $("#currencies").append("<tr onclick='selectCurrency(\""+object.get("Name")+"\")' > <td>1 "+object.get("Name")+" = </td><td>"+float(sellRatio)+"</td><td>"+float(buyRatio)+"</td><td>"+object.get("Change")+"%</td> </tr>")
+            }
+        }
+    }
+    retrieveValues()
+    function selectCurrency(name){
+        window.location = "/economy/currency/"+name
+    }
+</script>

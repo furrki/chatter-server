@@ -5,23 +5,25 @@
     <meta name="author" content="">
     <title>Project Mars | Path of Science..</title>
     <!-- Bootstrap core CSS -->
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom fonts for this template -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- Custom styles for this template -->
-    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="/assets/css/style.css" rel="stylesheet">
     <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
     <script>
       Parse.initialize("myAppId"); //PASTE YOUR Back4App APPLICATION ID
       Parse.javaScriptKey = "Allemetu"; //PASTE YOUR Javascript KEY
       Parse.serverURL = 'http://localhost:1337/parse'
+      function float(any){
+          return parseFloat(any).toFixed(4) * 1;
+      }
     </script>
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Raleway:400,500i" rel="stylesheet">
 
-    <link href="offcanvas.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
     <!--<script src="assets/js/slippry.min.js"></script>-->

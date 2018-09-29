@@ -1,0 +1,35 @@
+<div class="my-3 p-3 bg-white rounded shadow-sm">
+        <div class="row">
+            <div class="container text-center">
+              <table class="table table-stripped table-hover" id="economyTable">
+                <thead>
+                  <tr>
+                    <th>Currency</th>
+                    <th>Sell</th>
+                    <th>Buy</th>
+                    <th>Change</th>
+                  </tr>
+                </thead>
+                <tbody id="currencies">
+
+                </tbody>
+              </table>
+            </div>
+        </div>
+</div>
+<script>
+    async function retrieveValues() {
+        const Currency = Parse.Object.extend("Currency");
+        const query = new Parse.Query(Currency);
+        const results = await query.find();
+        for (let i = 0; i < results.length; i++) {
+            object = results[i];
+            $("#currencies").append("<tr onclick='selectCurrency(\""+object.get("Name")+"\")' > <td>1 "+object.get("Name")+" = </td><td>₺"+object.get("Sell")+"</td><td>₺"+object.get("Buy")+"</td><td>"+object.get("Change")+"%</td> </tr>")
+        }
+    }
+    retrieveValues()
+
+    function selectCurrency(name){
+        window.location = "/economy/currency/"+name
+    }
+</script>

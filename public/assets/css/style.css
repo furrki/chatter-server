@@ -56,3 +56,6 @@ main{
 .pull-right{
     text-align:right;
 }
+#economyTable tr{
+    cursor: pointer;
+}
