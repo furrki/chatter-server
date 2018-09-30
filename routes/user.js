@@ -11,7 +11,7 @@ router.post('/register', async function(req, res, next) {
     username = req.body.regusername
     password = req.body.regpass
     email = req.body.regemail
-    await user.register(username, password, email)
+    await user.register(username, password, email, req)
     req.session.user = user
     req.session.save()
      res.redirect("/")
@@ -39,6 +39,7 @@ router.post('/login', async function(req, res, next) {
         req.session.user = user
         req.session.save()
         res.redirect("/")
+        console.log(user.pocket) 
     }, function(error) {
         console.log(error)
     });
