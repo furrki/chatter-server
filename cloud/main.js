@@ -27,8 +27,9 @@ Parse.Cloud.define("buyCurrency",
                 await user.addCurrency(sellName, delta)
                 await user.addCurrency(buyName, buyAmount)
                 //console.log(user.pocket.get("Treasure"))
+                return user.pocket.get("Treasure")
             }
         }
-        return (req.user)
+        return "ERROR"
     }
 );

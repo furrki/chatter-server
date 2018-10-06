@@ -59,3 +59,6 @@ main{
 #economyTable tr{
     cursor: pointer;
 }
+.tocenter{
+    margin:auto;
+}

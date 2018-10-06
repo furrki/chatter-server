@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 router.get('/', function(req, res) {
     res.render("Template",{
-        page:"AllCurrencies",
+        page:"Economy",
         args: {
 
         }
@@ -10,7 +10,7 @@ router.get('/', function(req, res) {
 });
 router.get('/currency', function(req, res) {
     res.render("Template",{
-        page:"AllCurrencies",
+        page:"Economy",
         args: {
 
         }
