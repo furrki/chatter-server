@@ -16,14 +16,6 @@ if (!databaseUri) {
   console.log('DATABASE_URI not specified, falling back to localhost.');
 }
 
-var api = new ParseServer({
-  databaseURI: databaseUri || 'mongodb://localhost:27017/ProjectMars',
-  cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
-  appId: process.env.APP_ID || 'myAppId',
-  masterKey: process.env.MASTER_KEY || 'MASTER_KEY', //Add your master key here. Keep it secret!
-  serverURL: process.env.SERVER_URL || 'http://localhost:1337/parse',  // Don't forget to change to https if needed
-
-});
 
 
 var app = express();
@@ -41,8 +33,6 @@ app.set('view engine', 'ejs');
 
 app.use(bodyParser());
 // Serve the Parse API on the /parse URL prefix
-var mountPath = process.env.PARSE_MOUNT || '/parse';
-app.use(mountPath, api);
 
 // Parse Server plays nicely with the rest of your web routes
 Parse.initialize("myAppId"); //PASTE YOUR Back4App APPLICATION ID
@@ -54,11 +44,12 @@ app.use(session({
     secret: "fd34s@!@dfa453f3DF#$D&W",
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: !true }
 }));
 
 
 User = require("./models/User.js")
+Bank = require("./models/Bank.js")
+Economy = require("./models/Economy.js")
 
 
 app.get('*', function(req, res, next) {
@@ -86,6 +77,18 @@ app.use('/user', userRoutes);
 var economyRoutes = require('./routes/economy');
 app.use('/economy', economyRoutes);
 
+
+var api = new ParseServer({
+  databaseURI: databaseUri || 'mongodb://localhost:27017/ProjectMars',
+  cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
+  appId: process.env.APP_ID || 'myAppId',
+  masterKey: process.env.MASTER_KEY || 'MASTER_KEY', //Add your master key here. Keep it secret!
+  serverURL: process.env.SERVER_URL || 'http://localhost:1337/parse',  // Don't forget to change to https if needed
+
+});
+
+var mountPath = process.env.PARSE_MOUNT || '/parse';
+app.use(mountPath, api);
 
 
 var port = process.env.PORT || 1337;

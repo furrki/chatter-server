@@ -18,28 +18,26 @@ router.post('/register', async function(req, res, next) {
 });
 
 router.get('/login', function(req, res) {
-    res.render("Login")
+    res.redirect("/")
 });
 
 router.get('/logout', function(req, res) {
-    console.log(req.session.user)
-    req.session.user = null
-
+    req.session.user = undefined
     res.redirect("/")
 });
 
 
-router.post('/login', async function(req, res, next) {
-
+router.post('/login',  function(req, res, next) {
     username = req.body.logusername
     password = req.body.logpass
-    Parse.User.logIn(username, password).then( async function(result) {
-        user =  new User(result.id)
+
+    Parse.User.logIn(username, password).then(async function(result) {
+        user = new User(result.id)
+        user.setSessionToken(result.getSessionToken())
         await user.fetchUser(result.id)
         req.session.user = user
         req.session.save()
         res.redirect("/")
-        console.log(user.pocket) 
     }, function(error) {
         console.log(error)
     });

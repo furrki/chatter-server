@@ -17,6 +17,7 @@ class User {
 
             var query2 = new Parse.Query(Parse.Object.extend("Pocket"));
             query2.include("User")
+            query2.equalTo("Owner", user);
             var results2 = await  query2.find();
             this.pocket = results2[0]
 
@@ -43,7 +44,7 @@ class User {
         var results = await query.find();
         for (let i = 0; i < results.length; i++) {
             var object = results[i];
-            treasure.push([object.get("Name"), this.startingLiras * parseInt(object.get("Sell"))])
+            treasure.push([object.get("Name"), this.startingLiras * parseFloat(object.get("Sell"))])
         }
 
         const pocket2 = Parse.Object.extend("Pocket");
@@ -57,6 +58,7 @@ class User {
             this.object = user
             try {
                 user.signUp();
+                this.setSessionToken(user.getSessionToken())
                 this.pocket = thePocket
             } catch (error) {
                 console.log("Error: " + error.code + " " + error.message);
@@ -76,13 +78,31 @@ class User {
             }
         }
         if(index != -1){
-            treasure[index][1] = parseInt(treasure[index][1]) + parseInt(value)
+            treasure[index][1] = parseFloat(treasure[index][1]) + parseFloat(value)
         } else {
             treasure.push([curName, value])
         }
 
         this.pocket.set("Treasure", treasure)
         this.pocket.save()
+    }
+    getCurrencies(){
+        this.pocket.get("Treasure")
+    }
+    getCurrency(name){
+        var treasure = this.pocket.get("Treasure")
+        for(var i in treasure){
+            if(treasure[i][0] == name){
+                return treasure[i][1]
+            }
+        }
+        return 0
+    }
+    setSessionToken(st){
+        this.sessionToken = st
+    }
+    getSessionToken(){
+        return this.sessionToken
     }
     getUsername() {
         return this.object.get("username");
