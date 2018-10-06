@@ -9,10 +9,10 @@
                 Parse.User.logIn($("#username").val(), $("#password").val() ).then(function(result) {
                 console.log("c")
 
-            }, function(error) {
-                console.log("d")
+                }, function(error) {
+                    console.log("d")
 
-            });
+                });
             })
         })
         var currentUser = Parse.User.current();
