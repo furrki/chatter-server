@@ -1,0 +1,15 @@
+
+
+<div class="my-3 p-3 bg-white rounded shadow-sm">
+        <div class="row">
+             <%- include('AllCurrencies.ejs') %>
+        </div>
+</div>
+
+<%if (islogged) { %>
+<div class="my-3 p-3 bg-white rounded shadow-sm">
+        <div class="row">
+             <%- include('Exchange.ejs') %>
+        </div>
+</div>
+<% } %>
