@@ -78,7 +78,7 @@ var api = new ParseServer({
   masterKey:  'MASTER_KEY', //Add your master key here. Keep it secret!
   serverURL: process.env.SERVER_URL || 'http://localhost:1337/parse',  // Don't forget to change to https if needed
   liveQuery: {
-      classNames: []
+      classNames: ["Room", "Message"]
     }
 });
 
