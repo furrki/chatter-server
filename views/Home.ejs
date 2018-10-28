@@ -132,8 +132,11 @@
              $("#"+id).addClass("active_chat")
              window.selectedRoom = id
              loadMessages()
+             listenToMessages()
          }
          async function loadMessages(){
+            $(".msg_history").html()
+
             const Room = Parse.Object.extend("Room");
             const query2 = new Parse.Query(Room);
             const room = await query2.get(window.selectedRoom)
@@ -145,27 +148,49 @@
             for (let i = 0; i < results.length; i++) {
               var msg = results[i];
 
-              if(msg.get("Owner") == Parse.User.current()){
-                  $(".msg_history").append('<div class="incoming_msg">'
-                    + '<div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>'
-                    + '<div class="received_msg">'
-                     + ' <div class="received_withd_msg">'
-                        + '<p>'+msg.get("Text")+'</p>'
-                    + '    <span class="time_date"> 11:01 AM    |    Yesterday</span></div>'
-                + '    </div>'
-                  + '</div>')
-
-              } else {
-
-
-                  $(".msg_history").append('        <div class="outgoing_msg">'
-                             + '<div class="sent_msg">'
-                               + '<p>'+msg.get("Text")+'</p>'
-                               + '<span class="time_date"> 11:01 AM    |    Today</span> </div>'
-                           + '</div>')
-              }
-
+              addMsg(msg)
             }
+
+            $('.msg_history').animate({scrollTop:$(".msg_history").prop('scrollHeight')}, 'fast');
+     }
+         function addMsg(msg){
+             if(msg.get("Owner").id == Parse.User.current().id){
+                 $(".msg_history").append('        <div class="outgoing_msg">'
+                            + '<div class="sent_msg">'
+                              + '<p>'+msg.get("Text")+'</p>'
+                              + '<span class="time_date"> 11:01 AM    |    Today</span> </div>'
+                          + '</div>')
+
+             } else {
+                 $(".msg_history").append('<div class="incoming_msg">'
+                   + '<div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>'
+                   + '<div class="received_msg">'
+                    + ' <div class="received_withd_msg">'
+                       + '<p>'+msg.get("Text")+'</p>'
+                   + '    <span class="time_date"> 11:01 AM    |    Yesterday</span></div>'
+                + '    </div>'
+                 + '</div>')
+
+
+             }
+           }
+         async function listenToMessages(){
+            if(window.subscription){
+                window.subscription.unsubscribe();
+            }
+
+
+            const Room = Parse.Object.extend("Room");
+            const query2 = new Parse.Query(Room);
+            const room = await query2.get(window.selectedRoom)
+            const Message = Parse.Object.extend("Message");
+            const query = new Parse.Query(Message);
+            query.equalTo("Room", room);
+            window.subscription = query.subscribe();
+            window.subscription.on('create', (msg) => {
+              addMsg(msg)
+              $('.msg_history').animate({scrollTop:$(".msg_history").prop('scrollHeight')}, 'slow');
+            });
          }
          $(document).ready( async function(){
              $(".msg_send_btn").on("click", async function(){
@@ -181,7 +206,6 @@
                 selectRoom(window.selectedRoom)
             }
             $("#username").text(Parse.User.current().get("username"))
-
         })
 
      </script>
