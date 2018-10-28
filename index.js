@@ -35,8 +35,6 @@ app.use(bodyParser());
 // Serve the Parse API on the /parse URL prefix
 
 // Parse Server plays nicely with the rest of your web routes
-Parse.initialize("myAppId"); //PASTE YOUR Back4App APPLICATION ID
-Parse.serverURL = 'http://localhost:1337/parse'
 
 
 app.use(cookieParser());
@@ -48,8 +46,7 @@ app.use(session({
 
 
 User = require("./models/User.js")
-Bank = require("./models/Bank.js")
-Economy = require("./models/Economy.js")
+Message = require("./models/Message.js")
 
 
 app.get('*', function(req, res, next) {
@@ -67,24 +64,22 @@ app.dynamicHelpers({
         return req.session.user !== undefined;
     }
 });
-
 var indexRoutes = require('./routes/index');
 app.use('/', indexRoutes);
 
 var userRoutes = require('./routes/user');
 app.use('/user', userRoutes);
 
-var economyRoutes = require('./routes/economy');
-app.use('/economy', economyRoutes);
-
 
 var api = new ParseServer({
   databaseURI: databaseUri || 'mongodb://localhost:27017/ProjectMars',
   cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
   appId: process.env.APP_ID || 'myAppId',
-  masterKey: process.env.MASTER_KEY || 'MASTER_KEY', //Add your master key here. Keep it secret!
+  masterKey:  'MASTER_KEY', //Add your master key here. Keep it secret!
   serverURL: process.env.SERVER_URL || 'http://localhost:1337/parse',  // Don't forget to change to https if needed
-
+  liveQuery: {
+      classNames: []
+    }
 });
 
 var mountPath = process.env.PARSE_MOUNT || '/parse';
@@ -99,12 +94,3 @@ httpServer.listen(port, function() {
 
 // This will enable the Live Query real-time server
 ParseServer.createLiveQueryServer(httpServer);
-
-/*
-var cron = require('cron');
-var cronJob = cron.job("5 * * * * * *", function(){
-    // perform operation e.g. GET request http.get() etc.
-    console.info('cron job completed');
-});
-cronJob.start();
-*/

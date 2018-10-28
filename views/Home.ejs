@@ -1,1 +1,188 @@
- 
+
+<div class="my-3 p-3 bg-white rounded shadow-sm">
+
+
+
+        <!------     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+            <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+            <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> ---------->
+
+
+
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet" />
+        <link href="/assets/css/chatBox.css" type="text/css" rel="stylesheet" />
+
+        <div class="container">
+        <h3 class=" text-center" id="username" ></h3>
+        <div class="messaging">
+              <div class="inbox_msg">
+                <div class="inbox_people">
+                  <div class="headind_srch">
+                    <div class="recent_heading">
+                      <h4>Recent</h4>
+                    </div>
+                    <div class="srch_bar">
+                      <div class="stylish-input-group">
+                        <input type="text" class="search-bar"  placeholder="Search" >
+                        <span class="input-group-addon">
+                        <button type="button"> <i class="fa fa-search" aria-hidden="true"></i> </button>
+                        </span> </div>
+                    </div>
+                  </div>
+
+                  <div class="inbox_chat">
+                      <!--
+                    <div class="chat_list active_chat">
+                      <div class="chat_people">
+                        <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                        <div class="chat_ib">
+                          <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
+                          <p>Test, which is a new approach to have all solutions
+                            astrology under one roof.</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="chat_list">
+                      <div class="chat_people">
+                        <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                        <div class="chat_ib">
+                          <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
+                          <p>Test, which is a new approach to have all solutions
+                            astrology under one roof.</p>
+                        </div>
+                      </div>
+                    </div> -->
+
+                  </div>
+                </div>
+                <div class="mesgs">
+                  <div class="msg_history"></div>
+                  <div class="type_msg">
+                    <div class="input_msg_write">
+                      <input type="text" class="write_msg" placeholder="Type a message" />
+                      <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <p class="text-center top_spac"> Design by <a target="_blank" href="#">Sunil Rajput</a></p>
+
+            </div>
+        </div>
+
+
+
+     <table>
+         <% for(var i=0; i < users.length; i++) { %>
+            <tr>
+              <td style="cursor:pointer;" onclick="createRoom('<%=users[i].id%>')"> <%= users[i].getUsername() %> </td>
+            </tr>
+         <% } %>
+     </table>
+
+     <script>
+         window.rooms = []
+
+         async function sendMsg(){
+             const params =  { room: window.selectedRoom,  text: $(".write_msg").val() };
+            const ratings = await Parse.Cloud.run("sendMsg", params);
+            $(".write_msg").val("")
+         }
+         async function createRoom(whoid){
+             const params =  { who: whoid };
+             const cr = await Parse.Cloud.run("createRoom", params);
+         }
+         async function loadRooms(){
+             const Room = Parse.Object.extend("Room")
+             const query = new Parse.Query(Room);
+             query.include("User")
+             const room = new Room();
+
+             query.containsAll("Members", [Parse.User.current()]);
+             const results = await query.find();
+             window.rooms = results
+             for (r in window.rooms) {
+                 var other
+                 if(Parse.User.current().id == window.rooms[r].get("Members")[1].id) {
+                     other = window.rooms[r].get("Members")[0]
+                     await other.fetch()
+                 } else {
+                     other = window.rooms[r].get("Members")[1]
+                     await other.fetch()
+                 }
+
+
+                 $(".inbox_chat").append(
+                 '  <div class="chat_list" id="'+window.rooms[r].id+'" onClick=selectRoom(\"'+window.rooms[r].id+'\") > ' +
+                 '    <div class="chat_people"> ' +
+                      ' <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>' +
+                       '<div class="chat_ib">' +
+                         '<h5>'+ other.get("username")   +'<span class="chat_date">Dec 25</span></h5>' +
+                         '<p>Test, which is a new apch to have all solutions' +
+                          ' astrology under one roof.</p>' +
+                       '</div>' +
+                     '</div>' )
+             }
+         }
+         function selectRoom(id){
+             $("#"+window.selectedRoom).removeClass("active_chat")
+             $("#"+id).addClass("active_chat")
+             window.selectedRoom = id
+             loadMessages()
+         }
+         async function loadMessages(){
+            const Room = Parse.Object.extend("Room");
+            const query2 = new Parse.Query(Room);
+            const room = await query2.get(window.selectedRoom)
+            const Message = Parse.Object.extend("Message");
+            const query = new Parse.Query(Message);
+            query.equalTo("Room", room);
+            const results = await query.find();
+
+            for (let i = 0; i < results.length; i++) {
+              var msg = results[i];
+
+              if(msg.get("Owner") == Parse.User.current()){
+                  $(".msg_history").append('<div class="incoming_msg">'
+                    + '<div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>'
+                    + '<div class="received_msg">'
+                     + ' <div class="received_withd_msg">'
+                        + '<p>'+msg.get("Text")+'</p>'
+                    + '    <span class="time_date"> 11:01 AM    |    Yesterday</span></div>'
+                + '    </div>'
+                  + '</div>')
+
+              } else {
+
+
+                  $(".msg_history").append('        <div class="outgoing_msg">'
+                             + '<div class="sent_msg">'
+                               + '<p>'+msg.get("Text")+'</p>'
+                               + '<span class="time_date"> 11:01 AM    |    Today</span> </div>'
+                           + '</div>')
+              }
+
+            }
+         }
+         $(document).ready( async function(){
+             $(".msg_send_btn").on("click", async function(){
+                 sendMsg()
+            })
+            $(".write_msg").on("keypress", async function(e){
+                 if(e.which == 13)
+                    sendMsg()
+            })
+            await loadRooms()
+            if(window.rooms.length > 0){
+                window.selectedRoom = window.rooms[0].id
+                selectRoom(window.selectedRoom)
+            }
+            $("#username").text(Parse.User.current().get("username"))
+
+        })
+
+     </script>
+ </div>
