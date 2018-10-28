@@ -3,33 +3,60 @@ Parse.Cloud.define('hello', function(req, res) {
   res.success('Hi');
 });
 
-Parse.Cloud.define("buyCurrency",
-    async (req, res) => {
-        if(req.user){
-            var buyName = req.params.buyName
-            var sellName = req.params.sellName
-            var buyAmount = req.params.buyAmount
+Parse.Cloud.define("sendMsg", async (req, res) => {
+        var room = req.params.room
+        var text = req.params.text
+
+        const Room = Parse.Object.extend("Room");
+        const query = new Parse.Query(Room);
+        var roomObj = await query.get(room)
 
 
-            var user = new User(req.user.id)
-            await user.fetchUser()
+        const Message = Parse.Object.extend("Message")
+        const msg = new Message();
 
-            var economy = new Economy()
-            await economy.loadCurrencies()
+        msg.set("Text", text);
+        msg.set("Room", roomObj);
+        msg.set("Owner", req.user);
 
-            var valueToBuy = buyAmount * economy.getCurrency(buyName).get("Sell")
+        msg.save().then((gameScore) => {
 
-            var balance = user.getCurrency(sellName) * economy.getCurrency(sellName).get("Buy")
-            var left = balance - valueToBuy
-            if(left > 0){
-                newCurrency = left / economy.getCurrency(sellName).get("Buy")
-                var delta = newCurrency - user.getCurrency(sellName)
-                await user.addCurrency(sellName, delta)
-                await user.addCurrency(buyName, buyAmount)
-                //console.log(user.pocket.get("Treasure"))
-                return user.pocket.get("Treasure")
-            }
+        }, (error) => {
+
+        });
+
+        return "OK"
+    }
+);
+
+
+Parse.Cloud.define("createRoom", async (req, res) => {
+    if(req.user){
+        var who = req.params.who
+        const Room = Parse.Object.extend("Room")
+        const query = new Parse.Query(Room);
+        const room = new Room();
+
+        const query2 = new Parse.Query(Parse.User);
+        var toUser = await  query2.get(who)
+
+
+        query.containsAll("Members", [toUser, req.user]);
+        const results = await query.find();
+
+        if(results.length > 0){
+
+        } else {
+            room.set("Members", [req.user, toUser]);
+            room.save().then((croom) => {
+
+            }, (error) => {
+
+            });
+
         }
-        return "ERROR"
+
+        }
+        return "OK"
     }
 );

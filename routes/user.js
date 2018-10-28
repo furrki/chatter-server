@@ -7,14 +7,14 @@ router.get('/register', function(req, res) {
 });
 
 router.post('/register', async function(req, res, next) {
-    var user = new User("");
+    var user = new User();
     username = req.body.regusername
     password = req.body.regpass
     email = req.body.regemail
-    await user.register(username, password, email, req)
+    await user.register(username, password, email)
     req.session.user = user
     req.session.save()
-     res.redirect("/")
+    res.redirect("/")
 });
 
 router.get('/login', function(req, res) {
@@ -27,20 +27,10 @@ router.get('/logout', function(req, res) {
 });
 
 
-router.post('/login',  function(req, res, next) {
-    username = req.body.logusername
-    password = req.body.logpass
+router.get('/login/:token',  function(req, res, next) {
+    req.session.user = req.params.token
+    res.redirect("/")
 
-    Parse.User.logIn(username, password).then(async function(result) {
-        user = new User(result.id)
-        user.setSessionToken(result.getSessionToken())
-        await user.fetchUser(result.id)
-        req.session.user = user
-        req.session.save()
-        res.redirect("/")
-    }, function(error) {
-        console.log(error)
-    });
 })
 
 module.exports = router;

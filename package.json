@@ -1,7 +1,7 @@
 {
-  "name": "Project-Mars",
+  "name": "Chatter",
   "version": "1.0.0",
-  "description": "A Space Project",
+  "description": "Chat in Space",
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
