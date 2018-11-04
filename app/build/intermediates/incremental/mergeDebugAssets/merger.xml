@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="H:\Project\Project Mars\Chatter\app\src\main\assets"/><source path="H:\Project\Project Mars\Chatter\app\build\generated\assets\shaders\debug"/></dataSet><dataSet config="debug"><source path="H:\Project\Project Mars\Chatter\app\src\debug\assets"/></dataSet></merger>
