@@ -6,6 +6,7 @@ Parse.Cloud.define('hello', function(req, res) {
 Parse.Cloud.define("sendMsg", async (req, res) => {
         var room = req.params.room
         var text = req.params.text
+        var img = req.params.image
 
         const Room = Parse.Object.extend("Room");
         const query = new Parse.Query(Room);
@@ -18,7 +19,9 @@ Parse.Cloud.define("sendMsg", async (req, res) => {
         msg.set("Text", text);
         msg.set("Room", roomObj);
         msg.set("Owner", req.user);
-
+        if(img){
+            msg.set("Image",img)
+        }
         msg.save().then((gameScore) => {
 
         }, (error) => {
