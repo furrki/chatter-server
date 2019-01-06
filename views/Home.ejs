@@ -143,6 +143,7 @@
             const Message = Parse.Object.extend("Message");
             const query = new Parse.Query(Message);
             query.equalTo("Room", room);
+            query.ascending("createdAt");
             const results = await query.find();
 
             for (let i = 0; i < results.length; i++) {
@@ -186,6 +187,7 @@
             const Message = Parse.Object.extend("Message");
             const query = new Parse.Query(Message);
             query.equalTo("Room", room);
+            query.ascending("createdAt")
             window.subscription = query.subscribe();
             window.subscription.on('create', (msg) => {
               addMsg(msg)
