@@ -63,3 +63,22 @@ Parse.Cloud.define("createRoom", async (req, res) => {
         return "OK"
     }
 );
+Parse.Cloud.beforeSave('Message', async function(request, response) {
+    if(request.master || request.user){
+              if(request.object.isNew()){
+                    var room = (request.object.get("Room"))
+                    const query = new Parse.Query( Parse.Object.extend("Room"));
+                    const roomObj = await query.get(room.id);
+
+                  var acl = new Parse.ACL(request.user);
+                  for(var i=0; i<roomObj.get("Members").length; i++){
+                      console.log(roomObj.get("Members")[i].id)
+                      acl.setReadAccess(roomObj.get("Members")[i].id, true);
+                  }
+                  request.object.setACL(acl);
+             }
+
+    } else {
+        
+    }
+});
